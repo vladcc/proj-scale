@@ -1,0 +1,1 @@
+g++ main.cpp -o main.bin -Wall -Wfatal-errors -lpthread
