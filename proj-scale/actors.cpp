@@ -49,13 +49,13 @@ void perform_test(int num_of_proc,
 	make_data_set(data_set, workload_size);
 	
 	// create vectors for the processors
-	std::vector<std::vector<thing>*> all_vecs;
+	std::vector<std::vector<thing>> all_vecs;
 	for (int i = 0; i < num_of_proc; ++i)
-	{
-		std::vector<thing> * pv = new std::vector<thing>;
-		pv->reserve(workload_size);
-		all_vecs.push_back(pv);
-	}
+		all_vecs.push_back(std::vector<thing>());
+	
+	// reserve capacity
+	for (auto& v : all_vecs)
+		v.reserve(workload_size);
 	
 	// create processors and give them the vectors
 	std::vector<std::unique_ptr<process<thing>>> all_procs;
@@ -85,9 +85,11 @@ void perform_test(int num_of_proc,
 	}
 	
 	uint32_t wasnt_ready = 0;
+	volatile size_t vsz = 0; 
 	for (int i = 0; i < num_of_proc; ++i)
-	{
-		if (all_vecs[i]->size() != workload_size)
+	{	
+		vsz = all_vecs[i].size();
+		if (vsz != workload_size)
 		{
 			// ugly way to make sure the threads are done writing
 			++wasnt_ready;
@@ -112,10 +114,10 @@ void perform_test(int num_of_proc,
 	// make sure all processor vectors are the same as the data set
 	for (auto& vec : all_vecs)
 	{
-		if (!((*vec) == data_set))
+		if (!(vec == data_set))
 		{
 			print_vect("data_set", data_set);
-			print_vect("vec", *vec);
+			print_vect("vec", vec);
 			equit("data set different then the result; queue bug?");
 		}
 	}
@@ -124,10 +126,6 @@ void perform_test(int num_of_proc,
 	printf("threads %u qsize %u workload %u wasnt_ready %u time_(sec) %.4f\n",
 		num_of_proc, qsize, workload_size, wasnt_ready, time_spent
 	);
-	
-	// good habits
-	for (auto& v : all_vecs)
-		delete v;
 }
 
 bool get_int(const char * str, int * out)

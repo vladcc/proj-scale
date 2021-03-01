@@ -9,7 +9,7 @@ template <typename T>
 class process {
 	
 	public:
-	process(std::vector<T> * output, uint32_t qsize) :
+	process(std::vector<T> & output, uint32_t qsize) :
 		_queue(qsize),
 		_output(output),
 		_work(true)
@@ -23,7 +23,7 @@ class process {
 		while (_work)
 		{
 			while (_queue.read(&mine))
-				_output->push_back(mine);
+				_output.push_back(mine);
 		}
 	}
 	
@@ -43,6 +43,6 @@ class process {
 	private:
 	spscq<T> _queue;
 	std::thread _thread;
-	std::vector<T> * _output;
+	std::vector<T> & _output;
 	std::atomic<bool> _work;
 };

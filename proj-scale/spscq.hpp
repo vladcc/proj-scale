@@ -70,7 +70,7 @@ class spscq {
 	
 	private:
 	
-#ifdef PAD_TO_CACHE_LINE
+#ifdef PAD
 #define CACHE_SIZE 64
 	
 	T * _data;

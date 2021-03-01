@@ -1,1 +1,2 @@
-g++ main.cpp -o main.bin -Wall -Wfatal-errors -lpthread
+g++ actors.cpp -o actors.bin -Wall -Wfatal-errors -lpthread
+g++ base_case.cpp -o base_case.bin -Wall -Wfatal-errors

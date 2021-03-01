@@ -1,0 +1,2 @@
+g++ actors.cpp -o actors-opt.bin -Wall -O3 -Wfatal-errors -lpthread
+g++ base_case.cpp -o base_case-opt.bin -O3 -Wall -Wfatal-errors
